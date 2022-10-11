@@ -159,7 +159,7 @@ let movies = [
   },
   {
     Title: 'Jurassic Park',
-    Story:"A pragmatic paleontologist touring an almost complete theme park on an island in Central America is tasked with protecting a couple of kids after a power failure causes the park's cloned dinosaurs to run loose",
+    Story:"A pragmatic paleontologist touring an almost complete theme park on an island in Central America is tasked with protecting a couple of kids after a power failure causes the park's cloned dinosaurs to run loose.",
     Genre: {
       Name: 'Action',
       Description: 'Action film is a film genre in which the protagonist is thrust into a series of events that typically involve violence and physical feats.'
