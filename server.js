@@ -4,10 +4,18 @@ const express = require('express'),
   bodyParser = require('body-parser');
   uuid = require('uuid');
 
-app.use(morgan('combined')); // setup the logger, Mildware function to the terminal
-app.use(express.static('public')); // Automatically routes all requests for static files to their corresponding files within a certain folder on the server.
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+
 app.use(bodyParser.json()); // support parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); //support parsing of application/x-www-form-urlencoded post data
+app.use(morgan('combined')); // setup the logger, Mildware function to the terminal
+app.use(express.static('public')); // Automatically routes all requests for static files to their corresponding files within a certain folder on the server.
 
 let users = [
   {
