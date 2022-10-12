@@ -204,7 +204,7 @@ let movies = [
 
 // GET requests, READ
 app.get('/', (req, res) => {
-  res.send('Welcome to my website, where you can create a list of your favorite movies!');
+  res.send('Welcome to myFlix!');
 });
 
 // GET requests, READ
