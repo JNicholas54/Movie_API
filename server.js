@@ -1,17 +1,22 @@
 const express = require('express'),
-  app = express(),
-  morgan = require('morgan'),
   bodyParser = require('body-parser');
   uuid = require('uuid');
 
+const morgan = require('morgan');
+const app = express();
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
+const Genres = Models.Genres;
+const Directors = Models.Director;
 
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
+mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
+  useNewUrlParser: true,
+  useUnifiedTopology: true 
+});
+  
 app.use(bodyParser.json()); // support parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); //support parsing of application/x-www-form-urlencoded post data
 app.use(morgan('combined')); // setup the logger, Mildware function to the terminal
