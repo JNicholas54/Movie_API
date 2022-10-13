@@ -258,13 +258,13 @@ app.get("/movies/directors/:Name", (req, res) => {
 // Get all users (read in mongoose)
 app.get('/users', (req, res) => {
   Users.find()
-    .then((users) => {
-      res.status(201).json(users);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
+  .then((users) => {
+    res.status(201).json(users);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
 //Get a user by username
