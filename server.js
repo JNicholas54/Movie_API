@@ -267,7 +267,7 @@ app.get("/movies/directors/:Name", (req, res) => {
 app.get('/users', (req, res) => {
   Users.find()
   .then((users) => {
-    res.status(201).json(users);
+    res.status(200).json(users);
   })
   .catch((err) => {
     console.error(err);
