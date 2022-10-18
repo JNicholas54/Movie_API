@@ -320,7 +320,7 @@ app.put('/users/:Username', (req, res) => {
 { $set:
     {
       Username: req.body.Username,
-      PAssword: req.body.Password,
+      Password: req.body.Password,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }  
