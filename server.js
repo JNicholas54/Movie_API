@@ -230,8 +230,8 @@ app.get('/movies', (req, res) => {
 // Get a movie by title
 app.get("/movies/:title", (req, res) => {
   Movies.findOne({ Title: req.params.title })
-    .then((movie) => {
-      res.status(200).json(movie);
+    .then((movies) => {
+      res.status(200).json(movies);
     })
     .catch((err) => {
       console.error(err);
@@ -278,8 +278,8 @@ app.get('/users', (req, res) => {
 //Get a user by username
 app.get('/users/:Username', (req, res) => {
   Users.findOne({ Username: req.params.Username })
-    .then((user) => {
-      res.json(user);
+    .then((users) => {
+      res.json(users);
     })
     .catch((err) => {
       console.error(err);
@@ -290,8 +290,8 @@ app.get('/users/:Username', (req, res) => {
 //CREATE, adding a new user
 app.post('/users', (req, res) => {
   Users.findOne({ Username: req.body.Username })
-    .then((user) => {
-      if (user) {
+    .then((users) => {
+      if (users) {
         return res.status(400).send(req.body.Username + 'already exists');
       } else {
         Users
@@ -301,7 +301,7 @@ app.post('/users', (req, res) => {
           Email: req.body.Email,
           Birthday: req.body.Birthday
         })
-        .then((user) =>{res.status(201).json(user) })``
+        .then((users) =>{res.status(201).json(users) })``
         .catch((error) => {
           console.error(error);
           res.status(500).send('Error: ' + error);
@@ -337,7 +337,7 @@ app.put('/users/:Username', (req, res) => {
 });
 
 //Add a movie to a users list of favorites
-app.post('/users/:Username/movies/:MoviesID', (req, res) => {
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
     $push: { FavoriteMovies: req.params.MovieID }
   },
@@ -371,8 +371,8 @@ app.delete('/users/:Username/movies/:MovieID', (req, res) => {
 //allows existing user to deregister
 app.delete('/users/:Username', (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
-    .then((user) => {
-      if (!user) {
+    .then((users) => {
+      if (!users) {
         res.status(400).send(req.params.Username = ' was not found');
       } else {
         res.status(200).send(req.params.Username + ' was deleted.');
