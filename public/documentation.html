@@ -3,139 +3,106 @@
 <html lang="en">
 
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width , initial-scale=1.0">
-        <title>Documentation movie_api</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/draft.css" />
+        <title>Documentation: The Movie Vault</title>
     </head>
 
     <body>
-        <div class="description">
-            <h1>Movie API</h1>
-            <p>This is my documentation file requiere to give you instructions in how to use this API. Hear we have the requirements for this API to work:</p>
-            <p>
-                "The objective of this projects is to build the server-side component of a “movies” web application. The web
-                application will provide users with access to information about different
-                movies, directors, and genres. Users will be able to sign up, update their
-                personal information, and create a list of their favorite movies."
-            </p>
-        </div>
+        <header>
+            <h1>The Movie Vault API</h1>
+        </header>
 
-        <h3>Technical Requirements</h3>
-
-        <ul>
-            <li>The API must be a Node.js and Express application.</li>
-            <li>The API must use REST architecture, with URL endpoints corresponding to the data operations listed above</li>
-            <li>The API must use at least three middleware modules, such as the body-parser package for reading data from requests and morgan for logging.</li>
-            <li>The API must use a package.json file.</li>
-            <li>The database must be built using MongoDB.</li>
-            <li>The business logic must be modeled with Mongoose.</li>
-            <li>The API must provide movie information in JSON format.</li>
-            <li>The JavaScript code must be error-free.</li>
-            <li>The API must be tested in Postman.</li>
-            <li>The API must include user authentication and authorization code.</li>
-            <li>The API must include data validation logic.</li>
-            <li>The API must meet data security regulations.</li>
-            <li>The API source code must be deployed to a publicly accessible platform like GitHub.</li>
-            <li>The API must be deployed to Heroku.</li>
-        </ul>
-
-        <div class="endpoint-list">
-            <div class="endpoint">
-                <h2 class="endpoint-title">List all movies</h2>
-                <span class="endpoint-method">GET</span>
-                <span class="endpoint-url">/movies</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A JSON object holding data
-                    about all the movies</p>
-            </div>
-
-            <div class="endpoint">
-                <h2 class="endpoint-title">Get a movie</h2>
-                <span class="endpoint-method">GET</span>
-                <span class="endpoint-url">/movies/[Title]</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A JSON object holding data
-                    about a single movie
-                <pre>
-                    {
-                    "title": "A Few Good Men",
-                    "year": 1992,
-                    }
-                </pre>
-                </p>
-            </div>
-
-            <div class="endpoint">
-                <h2 class="endpoint-title">Add a movie</h2>
-                <span class="endpoint-method">POST</span>
-                <span class="endpoint-url">/movies</span>
-                <span class="endpoint-request">A JSON object holding data about the movie to be added</span>
-                <p class="endpoint-response">A JSON object holding data
-                    about an added movie</p>
-            </div>
-
-            <div class="endpoint">
-                <h2 class="endpoint-title">Remove a movie</h2>
-                <span class="endpoint-method">DELETE</span>
-                <span class="endpoint-url">/movies/[Title]</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A message indicating
-                    whether the movie was successfully removed</p>
-            </div>
-
-            <div class="endpoint">
-                <h2 class="endpoint-title">Get a genre</h2>
-                <span class="endpoint-method">GET</span>
-                <span class="endpoint-url">/genres/[Genre]</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A JSON object holding data
-                    about a genre</p>
-            </div>
-            <div class="endpoint">
-                <h2 class="endpoint-title">Get a director</h2>
-                <span class="endpoint-method">GET</span>
-                <span class="endpoint-url">/directors/[Director]</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A JSON object holding data
-                    about a director</p>
-            </div>
-            <div class="endpoint">
-                <h2 class="endpoint-title">Create a new user</h2>
-                <span class="endpoint-method">POST</span>
-                <span class="endpoint-url">/users</span>
-                <span class="endpoint-request">A JSON object holding data about the new user</span>
-                <p class="endpoint-response">A JSON object holding data
-                    about a registered user</p>
-            </div>
-            <div class="endpoint">
-                <h2 class="endpoint-title">Update an user</h2>
-                <span class="endpoint-method">PUT</span>
-                <span class="endpoint-url">/users/[Username]</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A text message indicating
-                    the updated username</p>
-            </div>
-            <div class="endpoint">
-                <h2 class="endpoint-title">Delete an user</h2>
-                <span class="endpoint-method">DELETE</span>
-                <span class="endpoint-url">/users/[Username]</span>
-                <span class="endpoint-request">none</span>
-                <p class="endpoint-response">A message indicating
-                    whether the user was successfully deregistered</p>
-            </div>
-        </div>
-
+        <table>
+            <thead>
+            <th>Endpoint Description</th>
+            <th>Method</th>
+            <th>URL</th>
+            <th>Body</th>
+            <th>Response</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Returns a JSON object of ALL movies</td>
+                <td class="get">GET</td>
+                <td>/movies</td>
+                <td>-</td>
+                <td>JSON</td>
+            </tr>
+            <tr>
+                <td>Returns a JSON object of a single movie</td>
+                <td class="get">GET</td>
+                <td>/movies/:Title</td>
+                <td>-</td>
+                <td>JSON</td>
+            </tr>
+            <tr>
+                <td>Returns a JSON object of all movies of a certain genre</td>
+                <td class="get">GET</td>
+                <td>/movies/genre/:Genre</td>
+                <td>-</td>
+                <td>JSON</td>
+            </tr>
+            <tr>
+                <td>Returns the description of a genre</td>
+                <td class="get">GET</td>
+                <td>/genre/:Genre</td>
+                <td>-</td>
+                <td>JSON</td>
+            </tr>
+            <tr>
+                <td>Returns a JSON object of a movie-director by name</td>
+                <td class="get">GET</td>
+                <td>/directors/:Name</td>
+                <td>-</td>
+                <td>JSON</td>
+            </tr>
+            <tr>
+                <td>Returns a JSON object of one user</td>
+                <td class="get">GET</td>
+                <td>/users/:Username</td>
+                <td>-</td>
+                <td>JSON</td>
+            </tr>
+            <tr>
+                <td>Creates a new user from a JSON</td>
+                <td class="post">POST</td>
+                <td>/users</td>
+                <td>JSON</td>
+                <td>201</td>
+            </tr>
+            <tr>
+                <td>Updates the information of a user</td>
+                <td class="put">PUT</td>
+                <td>/users/:Username</td>
+                <td>JSON</td>
+                <td>201</td>
+            </tr>
+            <tr>
+                <td>Adds a movie to a user's list of favorite movies</td>
+                <td class="put">PUT</td>
+                <td>/users/:Username/movies/:_id</td>
+                <td>-</td>
+                <td>201</td>
+            </tr>
+            <tr>
+                <td>Removes a movie from a user's list of favorite movies</td>
+                <td class="delete">DELETE</td>
+                <td>/users/:Username/movies/:_id</td>
+                <td>-</td>
+                <td>201</td>
+            </tr>
+            <tr>
+                <td>Removes an existing user from the database</td>
+                <td class="delete">DELETE</td>
+                <td>/users/:Username</td>
+                <td>-</td>
+                <td>201</td>
+            </tr>
+            </tbody>
+        </table>    
     </body>
 
 </html>
-
-
-
-
-
-<!-- 
-    This file will contain instructions for other developers on how to use the API
-    I will be adding helpful instructions as I continue building this project
--->
-

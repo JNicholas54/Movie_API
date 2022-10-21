@@ -1,0 +1,41 @@
+:root * {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  body {
+    background-color: whitesmoke;
+  }
+  
+  header {
+    background-color: #444;
+    color: #fff;
+    padding: 1em;
+  }
+  
+  h1 {
+    color: #fff;
+  }
+  
+  table {
+    width: 100%;
+    padding: 1em 0;
+    background-color: #ddd;
+  }
+  
+  table * {
+    background-color: #fff;
+    border: 1px solid #777;
+    padding: 0.5em;
+  }
+  
+  thead * {
+    background-color: gold;
+    color: #222;
+  }
+  
+  .get { color: blue }
+  .post { color: green }
+  .put { color: darkorange }
+  .delete { color: red }

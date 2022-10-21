@@ -1,20 +1,28 @@
 const express = require('express'),
   bodyParser = require('body-parser');
   uuid = require('uuid');
-
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+const Genres = Models.Genres;
+const Directors = Models.Director;
 const morgan = require('morgan');
-
+const { check, validationResult } = require('express-validator');
 const app = express();
+
+// below is the Middleware
 app.use(bodyParser.json()); // support parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); //support parsing of application/x-www-form-urlencoded post data
 
-const mongoose = require('mongoose');
-const Models = require('./models.js');
-
+// Mongoose; movies and users are mongoose models exposed in 'models.js'
 const Movies = Models.Movie;
 const Users = Models.User;
-const Genres = Models.Genres;
-const Directors = Models.Director;
+
+// Authentication
+const auth = require('./auth')(app);
+
+// Passport
+const passport = require('passport');
+require('./passport');
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
   useNewUrlParser: true,
@@ -24,13 +32,20 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', {
 app.use(morgan('combined')); // setup the logger, Mildware function to the terminal
 app.use(express.static('public')); // Automatically routes all requests for static files to their corresponding files within a certain folder on the server.
 
+//// ENDPOINTS //////
+
 // default text response
 app.get('/', (req, res) => {
   res.send('Welcome to myFlix!');
 });
 
+// GET requests, READ
+app.get('/documentation', (req, res) => {                  
+  res.sendFile('public/documentation.html', { root: __dirname });
+});
+
 //get all movies and return json object
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(200).json(movies);
@@ -42,7 +57,7 @@ app.get('/movies', (req, res) => {
 });
 
 // Get a movie by title
-app.get("/movies/:title", (req, res) => {
+app.get("/movies/:title", passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.title })
     .then((movies) => {
       res.status(200).json(movies);
@@ -54,7 +69,7 @@ app.get("/movies/:title", (req, res) => {
 });
 
 // get Genre by name
-app.get("/movies/genres/:Name", (req, res) => {
+app.get("/movies/genres/:Name", passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ 'Genre.Name': req.params.Name })
     .then((movies) => {
       res.send(movies.Genre);
@@ -66,7 +81,7 @@ app.get("/movies/genres/:Name", (req, res) => {
 });  
 
 // get director data by name
-app.get("/movies/directors/:Name", (req, res) => {
+app.get("/movies/directors/:Name", passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ 'Director.Name': req.params.Name })
     .then((movies) => {
       res.send(movies.Director);
@@ -78,19 +93,19 @@ app.get("/movies/directors/:Name", (req, res) => {
 }); 
 
 // Get all users (read in mongoose)
-app.get('/users', (req, res) => {
-  Users.find()
-  .then((users) => {
-    res.status(200).json(users);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  });
-});
+// app.get('/users', (req, res) => {
+//   Users.find()
+//   .then((users) => {
+//     res.status(200).json(users);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//     res.status(500).send('Error: ' + err);
+//   });
+// });
 
 //Get a user by username
-app.get('/users/:Username', (req, res) => {
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
     .then((users) => {
       res.json(users);
@@ -108,8 +123,7 @@ app.post('/users', (req, res) => {
       if (users) {
         return res.status(400).send(req.body.Username + 'already exists');
       } else {
-        Users
-        .create({
+        Users.create({
           Username: req.body.Username,
           Password: req.body.Password,
           Email: req.body.Email,
@@ -196,11 +210,6 @@ app.delete('/users/:Username', (req, res) => {
       console.error(err);
       res.status(500).send('Error ' + err);
     });
-});
-
-// GET requests, READ
-app.get('/documentation', (req, res) => {                  
-  res.sendFile('public/documentation.html', { root: __dirname });
 });
 
 //Error handling middleware function
