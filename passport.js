@@ -15,21 +15,21 @@ passport.use(new LocalStrategy({
     }, (username, password, callback) => {
     console.log(username + ' ' + password);
     Users.findOne({ Username: username }, (error, user) => {
-        if (error) {
+        if(error) {
             console.log(error);
             return callback(error);
         }
         // If the username can't be found
-        if (!user) {
+        if(!user) {
             console.log('incorrect username');
             return callback(null, false, {message: 'Incorrect username or password.'});
         }
 
         // to validate any password a user enters
-        if (!user.validatePassword(password)) {
-            console.log('incorrect password');
-            return callback(null, false, {message: 'Incorret password.'});
-        }
+        // if(!user.validatePassword(password)) {
+        //     console.log('incorrect password');
+        //     return callback(null, false, {message: 'Incorret password.'});
+        // }
 
         console.log('finished');
         return callback(null, user);
@@ -41,7 +41,7 @@ passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'your_jwt_secret'},
     (jwtPayload, callback) => {
-        return Users.findById(jwtPayload._id)
+    return Users.findById(jwtPayload._id)
     .then((user) => {
         return callback(null, user);
     })

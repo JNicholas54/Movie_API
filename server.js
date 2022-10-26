@@ -1,24 +1,24 @@
 const express = require('express'),
   bodyParser = require('body-parser');
   uuid = require('uuid');
-const mongoose = require('mongoose');
-const Models = require('./models.js');
-const Genres = Models.Genres;
-const Directors = Models.Director;
-const morgan = require('morgan');
-const { check, validationResult } = require('express-validator');
-const app = express();
+  const mongoose = require('mongoose');
+  const Models = require('./models.js');
+  const { check, validationResult } = require('express-validator');
+  const morgan = require('morgan');
+  app = express(),
 
 // below is the Middleware
 app.use(bodyParser.json()); // support parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); //support parsing of application/x-www-form-urlencoded post data
 
-// Mongoose; movies and users are mongoose models exposed in 'models.js'
+// Mongoose; These are mongoose models exposed in 'models.js'
 const Movies = Models.Movie;
 const Users = Models.User;
+const Genres = Models.Genres;
+const Directors = Models.Director;
 
 // Authentication
-const auth = require('./auth')(app);
+let auth = require('./auth')(app);
 
 // Passport
 const passport = require('passport');
@@ -27,7 +27,8 @@ require('./passport');
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
   useNewUrlParser: true,
   useUnifiedTopology: true 
-});
+})
+  .then(console.log('DB Connected'));
   
 app.use(morgan('combined')); // setup the logger, Mildware function to the terminal
 app.use(express.static('public')); // Automatically routes all requests for static files to their corresponding files within a certain folder on the server.
@@ -48,11 +49,11 @@ app.get('/documentation', (req, res) => {
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
   .then((movies) => {
-    res.status(200).json(movies);
+    res.status(201).json(movies);
   })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
   });
 });
 
@@ -115,6 +116,46 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
       res.status(500).send('Error: ', + err);
     });
 });
+
+// Creates a new user // expects a JSON in the request body
+app.post('/users',
+  // validation array. 'check' refs to 'express-validator' pkg import
+  [
+    check('Username', 'Username length must be at least 5 characters.').isLength({ min: 5 }),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required.').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
+    // evaluate validations
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }});
+    
+  //   let hashedPassword = Users.hashPassword(req.body.Password);
+  //   Users.findOne({ Username: req.body.Username })
+  //     .then((user) => {
+  //       if(user) {
+  //         return res.status(400).send(req.body.Username + ' already exists');
+  //       } else {
+  //         Users.create({
+  //           Username: req.body.Username,
+  //           Password: hashedPassword,
+  //           Email: req.body.Email,
+  //           Birthday: req.body.Birthday
+  //         })
+  //         .then((user) => { res.status(201).json(user) })
+  //         .catch((err) => {
+  //           console.error(err);
+  //           res.status(500).send('Error: ' + err);
+  //         })
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       res.status(500).send('Error: ' + err);
+  //     });
+  // });
  
 //CREATE, adding a new user
 app.post('/users', (req, res) => {
