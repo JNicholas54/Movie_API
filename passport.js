@@ -26,10 +26,10 @@ passport.use(new LocalStrategy({
         }
 
         // to validate any password a user enters
-        // if(!user.validatePassword(password)) {
-        //     console.log('incorrect password');
-        //     return callback(null, false, {message: 'Incorret password.'});
-        // }
+        if(!user.validatePassword(password)) {
+            console.log('incorrect password');
+            return callback(null, false, {message: 'Incorret password.'});
+        }
 
         console.log('finished');
         return callback(null, user);
