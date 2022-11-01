@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true })); //support parsing of applica
 
 
 // Authentication
-require('./auth')(app);
+const auth = require('./auth')(app);
 
 // Passport
 const passport = require('passport');
