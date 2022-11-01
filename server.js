@@ -35,7 +35,7 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', {
   .then(console.log('DB Connected'));
 
 const cors = require('cors');
-app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow ewquests from all orgins  
+app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
   
 //// ENDPOINTS //////
 
