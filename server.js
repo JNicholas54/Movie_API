@@ -20,11 +20,10 @@ const { check, validationResult } = require('express-validator');
 app.use(bodyParser.json()); // support parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); //support parsing of application/x-www-form-urlencoded post data
 
-
-// Authentication
+// Authentication //
 const auth = require('./auth')(app);
 
-// Passport
+// Passport //
 const passport = require('passport');
 require('./passport');
 
@@ -50,7 +49,7 @@ app.get('/documentation', (req, res) => {
 });
 
 //get all movies and return json object
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies', /* passport.authenticate('jwt', { session: false }), */ (req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(200).json(movies);
@@ -89,43 +88,31 @@ app.get("/movies/genres/:Name", passport.authenticate('jwt', { session: false })
 app.get("/movies/directors/:Name", passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ 'Director.Name': req.params.Name })
     .then((movies) => {
-      res.json(movie);
+      res.send(movies.Director);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
       res.status(500).send('Error: ' + 'No such director!');
     });
 }); 
 
 // Get all users (read in mongoose)
-app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false}), (req, res) => {
   Users.find()
   .then((users) => {
     res.status(200).json(users);
   })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).send("Error: " + error);
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error: " + err);
   });
 });
-
-// get a user by username
-// app.get('/users', (req, res) => {
-//   Users.find()
-//   .then((users) => {
-//     res.status(200).json(users);
-//   })
-//   .catch((err) => {
-//     console.error(err);
-//     res.status(500).send('Error: ' + err);
-//   });
-// });
 
 //Get a user by username
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
-    .then((User) => {
-      res.status(200).json(User);
+    .then((users) => {
+      res.status(200).json(users);
     })
     .catch((err) => {
       console.error(err);
@@ -176,71 +163,53 @@ app.post('/users',
        });
    });
 
-//Update a users info by username
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
-[
-  check ('Username', 'Username is required').isLength({min: 5}),
-  check ('Username', 'Username contains non alphanumeric character - not allowed.').isAlphanumeric(),
-  check('Password', 'Password is required').not().isEmpty(),
-  check ('Email', 'Email does not appear to be valid').isEmail()
-], (req, res) => {
-
-  let errors = validationResult(req);
-
-  if(!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array()});
-  }
-
-  let hashedPassword = Users.hashPassowrd(req.body.Passowrd);
-  Users.findOneAndUpdate({ Username: req.params.Username },
-  { 
-   $set:{
+// Updates the user by username
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $set: {
       Username: req.body.Username,
-      Password: hashedPassword,
+      Password: req.body.Password,
       Email: req.body.Email,
       Birthday: req.body.Birthday
-    }  
+    }
   },
-  { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if(err) {
+  { new: true }) // the *updated (new) document is returned
+    .then((updatedUser) => {
+      res.status(201).json(updatedUser);
+    })
+    .catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
-  });    
+    });
 });
 
-// Allow users add to their list of Favorites (create)
-app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+// Adds a movie to a user's list of favorite movies
+app.put('/users/:Username/movies/:_id', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
-    $push: { FavoriteMovies: req.params.MovieID }
+    $addToSet: { FavoriteMovies: req.params._id } // $addToSet won't add duplicates (note: if there IS a duplicate, it won't throw an error either...)
   },
-  {new: true}, //This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if(err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
+  { new: true })  // the *updated (new) document is returned
+  .then((updatedUser) => {
+    res.status(201).json(updatedUser);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
-} );
+});
 
-//Delete movie from favorite list
-app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username}, {
-    $pull: { FavoriteMovies: req.params.MovieID }
+// Removes a movie from a user's list of favorite movies
+app.delete('/users/:Username/movies/:_id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $pull: { FavoriteMovies: req.params._id }
   },
-  { new: true },
-  (err, updatedUser) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
+  { new: true })  // the *updated (new) document is returned
+  .then((updatedUser) => {
+    res.status(201).json(updatedUser);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
 });
 
