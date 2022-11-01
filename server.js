@@ -5,6 +5,8 @@ const uuid = require('uuid');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const fs = require('fs');
+const path = require('path');
   
   // Mongoose; These are mongoose models exposed in 'models.js'
 const Movies = Models.Movie;
