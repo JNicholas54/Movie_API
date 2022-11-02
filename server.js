@@ -33,8 +33,8 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', {
 })
   .then(console.log('DB Connected'));
 
-const cors = require('cors');
-app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
+//const cors = require('cors');
+//app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
   
 //// ENDPOINTS //////
 
@@ -49,7 +49,7 @@ app.get('/documentation', (req, res) => {
 });
 
 //get all movies and return json object
-app.get('/movies', /* passport.authenticate('jwt', { session: false }), */ (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(200).json(movies);
@@ -97,7 +97,7 @@ app.get("/movies/directors/:Name", passport.authenticate('jwt', { session: false
 }); 
 
 // Get all users (read in mongoose)
-app.get('/users', passport.authenticate('jwt', { session: false}), (req, res) => {
+app.get('/users', /* passport.authenticate('jwt', { session: false}),*/ (req, res) => {
   Users.find()
   .then((users) => {
     res.status(200).json(users);
@@ -111,8 +111,8 @@ app.get('/users', passport.authenticate('jwt', { session: false}), (req, res) =>
 //Get a user by username
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
-    .then((users) => {
-      res.status(200).json(users);
+    .then((user) => {
+      res.status(200).json(user);
     })
     .catch((err) => {
       console.error(err);
@@ -135,33 +135,34 @@ app.post('/users',
     if(!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
+  });
     
-     let hashedPassword = Users.hashPassword(req.body.Password);
-     Users.findOne({ Username: req.body.Username })
-       .then((user) => {
-         if(user) {
-           return res.status(400).send(req.body.Username + ' already exists');
-         } else {
-           Users.create({
-             Username: req.body.Username,
-             Password: hashedPassword,
-             Email: req.body.Email,
-             Birthday: req.body.Birthday
-           })
-           .then((user) => { 
-            res.status(200).json(user);
-           })
-           .catch((err) => {
-             console.error(err);
-             res.status(500).send('Error: ' + err);
-           })
-         }
-       })
-       .catch((err) => {
-         console.error(err);
-         res.status(500).send('Error: ' + err);
-       });
-   });
+  //    let hashedPassword = Users.hashPassword(req.body.Password);
+  //    Users.findOne({ Username: req.body.Username })
+  //      .then((user) => {
+  //        if(user) {
+  //          return res.status(400).send(req.body.Username + ' already exists');
+  //        } else {
+  //          Users.create({
+  //            Username: req.body.Username,
+  //            Password: hashedPassword,
+  //            Email: req.body.Email,
+  //            Birthday: req.body.Birthday
+  //          })
+  //          .then((user) => { 
+  //           res.status(200).json(user);
+  //          })
+  //          .catch((err) => {
+  //            console.error(err);
+  //            res.status(500).send('Error: ' + err);
+  //          })
+  //        }
+  //      })
+  //      .catch((err) => {
+  //        console.error(err);
+  //        res.status(500).send('Error: ' + err);
+  //      });
+  //  });
 
 // Updates the user by username
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
