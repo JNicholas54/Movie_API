@@ -27,11 +27,23 @@ const auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
+//================================================================ below is the connection when switching to my localhost. 
+// mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true 
+// })
+//   .then(console.log('DB Connected'));
+//================================================================
+
+// below is the new connection between Heroku and mongoDBAtlas
+mongoose.connect( process.env.CONNECTION_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true 
+  useUnifiedTopology: true
 })
   .then(console.log('DB Connected'));
+
+
+
 
 const cors = require('cors');
 app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
@@ -261,3 +273,7 @@ app.listen(port, '0.0.0.0',  () => {
 
 // app.listen(8080, () => {
 //   console.log('Your app is listening on port 8080.');
+
+/*
+mongoimport --uri mongodb+srv://jerAtlasDBadmin:smcTLDE2tkidDPHW@jeratlasdb.ltinnim.mongodb.net/myFlixDB --collection movies --type json --file ../exported_collections/movies.json
+*/ 
