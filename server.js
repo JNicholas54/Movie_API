@@ -27,30 +27,14 @@ const auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-//================================================================ below is the connection when switching to my localhost. 
-// mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true 
-// })
-//   .then(console.log('DB Connected'));
-//================================================================
-
-// below is the new connection between Heroku and mongoDBAtlas
-mongoose.connect( process.env.CONNECTION_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(console.log('DB Connected'));
-
-
-
-
+//CORS
 const cors = require('cors');
+app.use(express.static('public'));
 app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
-  
+
 // If I want only certain origins to be given access [use the code below]
- /*
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+/*
+let allowedOrigins = ['https://guarded-wave-99547.herokuapp.com/', 'http://localhost8080', 'http://testsite.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -62,8 +46,23 @@ app.use(cors({
     }
     return callback(null. true);
   }
-}));
-*/
+})); */
+
+//================================================================ below is the connection when switching to my localhost. 
+// mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true 
+// })
+//   .then(console.log('DB Connected'));
+//================================================================
+
+// below is the new connection between Heroku and mongoDBAtlas
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(console.log('DB Connected'));
+
 
 //// ENDPOINTS //////
 
