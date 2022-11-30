@@ -34,7 +34,7 @@ app.use(cors()); // this specifies that the app uses cors and by default it will
 
 // If I want only certain origins to be given access [use the code below]
 /*
-let allowedOrigins = ['https://guarded-wave-99547.herokuapp.com/', 'http://localhost8080', 'http://testsite.com'];
+let allowedOrigins = ['https://guarded-wave-99547.herokuapp.com/', 'http://localhost1234', 'http://testsite.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
