@@ -273,6 +273,6 @@ app.listen(port, '0.0.0.0',  () => {
 // app.listen(8080, () => {
 //   console.log('Your app is listening on port 8080.');
 
-/*
+/* CODE
 mongoimport --uri mongodb+srv://jerAtlasDBadmin:smcTLDE2tkidDPHW@jeratlasdb.ltinnim.mongodb.net/myFlixDB --collection movies --type json --file ../exported_collections/movies.json
 */ 
