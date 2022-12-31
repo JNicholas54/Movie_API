@@ -57,7 +57,7 @@ app.use(cors({
 //================================================================
 
 // below is the new connection between Render and mongoDBAtlas
-mongoose.connect(process.env.CONNECTION_URI1, {
+mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
