@@ -34,7 +34,7 @@ app.use(cors()); // this specifies that the app uses cors and by default it will
 
 // If I want only certain origins to be given access [use the code below]
 /*
-let allowedOrigins = ['https://guarded-wave-99547.onrender.com/', 'http://localhost1234', 'http://testsite.com'];
+let allowedOrigins = ['https://guarded-wave-99547.com/', 'http://localhost1234', 'http://testsite.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -265,7 +265,7 @@ app.use((err, req, res, next) => {
 });
 
 // listen for requests
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 1234;
 app.listen(port, '0.0.0.0',  () => {
   console.log('Listening on Port ' + port);
 });
