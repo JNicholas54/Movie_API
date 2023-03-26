@@ -32,6 +32,9 @@ const cors = require('cors');
 app.use(express.static('public'));
 app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
 
+// this is my environment variable
+require('dotenv').config();
+
 // below is the new connection between Heroku and MongoDB
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
@@ -250,5 +253,5 @@ app.listen(port, '0.0.0.0',  () => {
 //   console.log('Your app is listening on port 8080.');
 
 /* CODE
-mongoimport --uri mongodb+srv://jerAtlasDBadmin:smcTLDE2tkidDPHW@jeratlasdb.ltinnim.mongodb.net/myFlixDB --collection movies --type json --file ../exported_collections/movies.json
+mongoimport --uri mongodb+srv://jerAtlasDBadmin:passpasspass@jeratlasdb.ltinnim.mongodb.net/myFlixDB?retryWrites=true&w=majority --collection movies --type json --file ../exported_collections/movies.json
 */ 
