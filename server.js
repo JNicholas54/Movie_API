@@ -32,22 +32,6 @@ const cors = require('cors');
 app.use(express.static('public'));
 app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
 
-// If I want only certain origins to be given access [use the code below]
-/*
-let allowedOrigins = ['https://guarded-wave-99547.onrender.com/', 'http://localhost1234', 'http://testsite.com'];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      //if a speciic origin isn't found on the list of allowed origins
-      let messafe = 'The CORS policy for this application doesn\'t allow access from origin ' = origin;
-      return callback(new Error(message ), false);
-    }
-    return callback(null. true);
-  }
-})); */
-
 //================================================================ below is the connection when switching to my localhost. 
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
 //   useNewUrlParser: true,
@@ -56,7 +40,7 @@ app.use(cors({
 //   .then(console.log('DB Connected'));
 //================================================================
 
-// below is the new connection between Render and mongoDBAtlas
+// below is the new connection between Heroku and MongoDB
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
