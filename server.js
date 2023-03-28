@@ -30,7 +30,22 @@ require('./passport');
 //CORS
 const cors = require('cors');
 app.use(express.static('public'));
-app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins  
+app.use(cors()); // this specifies that the app uses cors and by default it will set the application to allow requests from all orgins
+
+//const allowedOrigins = ['http://localhost:1234']; **** this was an alternate effort to solve cors error
+// app.use(cors({
+//   origin: function(origin, callback) {
+//     // allow requests with no origin
+//     // (like mobile apps or curl requests)
+//     if (!origin) return callback(null, true);
+//     if (allowedOrigins.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this resource does not allow access from the specified origin.';
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
+
 
 // this is my environment variable
 require('dotenv').config();
