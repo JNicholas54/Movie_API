@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
 require('./passport'); // the local passport file
+const cors = require('cors');
 
 let generateJWTToken = (user) => {
     return jwt.sign(user, jwtSecret, {
@@ -17,6 +18,7 @@ let generateJWTToken = (user) => {
 // POST login
 module.exports = (router) => {
     router.use(passport.initialize());
+    router.use(cors());
     router.post('/login', (req, res) => {
         passport.authenticate('local', { session: false }, (error, user, info) => {
             if (error || !user) {
