@@ -9,7 +9,8 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-/** Mongoose; These are mongoose models exposed in 'models.js' */
+/**
+ * Mongoose; These are mongoose models exposed in 'models.js' */
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Genre;
@@ -17,7 +18,8 @@ const Directors = Models.Directors;
 
 const { check, validationResult } = require('express-validator');
 
-/** below is the Middleware */
+/**
+ * below is the Middleware */
 app.use(bodyParser.json()); // support parsing of application/json type post data
 app.use(bodyParser.urlencoded({ extended: true })); //support parsing of application/x-www-form-urlencoded post data
 
@@ -67,7 +69,8 @@ mongoose
 
 //// ENDPOINTS //////
 
-/**  default text response */
+/**
+ * default text response */
 app.get('/', (req, res) => {
   res.send('Welcome to myFlix!');
 });
@@ -81,7 +84,8 @@ app.get('/documentation', (req, res) => {
   res.sendFile('public/documentation.html', { root: __dirname });
 });
 
-/**get all movies and return json object */
+/**
+ * get all movies and return json object */
 app.get(
   '/movies',
   passport.authenticate('jwt', { session: false }),
@@ -97,7 +101,8 @@ app.get(
   }
 );
 
-/**  Get a movie by title */
+/**
+ * Get a movie by title */
 app.get(
   '/movies/:title',
   passport.authenticate('jwt', { session: false }),
@@ -113,7 +118,8 @@ app.get(
   }
 );
 
-/**  get Genre by name */
+/**
+ * get Genre by name */
 app.get(
   '/movies/genres/:Name',
   passport.authenticate('jwt', { session: false }),
@@ -129,7 +135,8 @@ app.get(
   }
 );
 
-/**  get director data by name */
+/**
+ * get director data by name */
 app.get(
   '/movies/directors/:Name',
   passport.authenticate('jwt', { session: false }),
@@ -145,7 +152,8 @@ app.get(
   }
 );
 
-/** Get all users (read in mongoose) */
+/**
+ * Get all users (read in mongoose) */
 app.get(
   '/users',
   passport.authenticate('jwt', { session: false }),
@@ -161,7 +169,8 @@ app.get(
   }
 );
 
-/** Get a user by username */
+/**
+ * Get a user by username */
 app.get(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
@@ -177,7 +186,9 @@ app.get(
   }
 );
 
-/** Allow a new user to register (create) // expects a JSON in the request body */
+/**
+ * Allow a new user to register (create) // expects a JSON in the request body
+ * */
 app.post(
   '/users',
   // validation array. 'check' refs to 'express-validator' pkg import
@@ -230,7 +241,8 @@ app.post(
   }
 );
 
-/** Updates the user by username */
+/**
+ * Updates the user by username */
 app.put(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
@@ -257,7 +269,8 @@ app.put(
   }
 );
 
-/** Adds a movie to a user's list of favorite movies */
+/**
+ * Adds a movie to a user's list of favorite movies */
 app.put(
   '/users/:Username/movies/:_id',
   passport.authenticate('jwt', { session: false }),
@@ -279,7 +292,8 @@ app.put(
   }
 );
 
-/** Removes a movie from a user's list of favorite movies */
+/**
+ * Removes a movie from a user's list of favorite movies */
 app.delete(
   '/users/:Username/movies/:_id',
   passport.authenticate('jwt', { session: false }),
@@ -301,7 +315,8 @@ app.delete(
   }
 );
 
-/** Allow existing users deregister */
+/**
+ * Allow existing users deregister */
 app.delete(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
